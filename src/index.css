@@ -1,0 +1,67 @@
+:root {
+  /* Palette */
+  --sapphire: rgb(48, 80, 112);
+  --royal-blue: rgb(17, 34, 80);
+  --quicksand: rgb(224, 181, 143);
+  --swan-wing: rgb(245, 240, 233);
+  --shellstone: rgb(217, 203, 194);
+  --midnight: rgb(8, 14, 32);
+
+  --ink: var(--royal-blue);
+  --ink-soft: var(--sapphire);
+  --accent: var(--quicksand);
+  --paper: var(--swan-wing);
+  --paper-edge: var(--shellstone);
+
+  /* Type */
+  --serif-display: 'Marcellus', 'Cormorant Garamond', Georgia, serif;
+  --serif-heading: 'Cormorant Garamond', Georgia, serif;
+  --serif-body: 'EB Garamond', Georgia, 'Times New Roman', serif;
+
+  font-family: var(--serif-body);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--swan-wing);
+  background: var(--midnight);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+}
+
+body {
+  background: var(--midnight);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--serif-heading);
+  font-weight: 500;
+  margin: 0 0 0.6em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+::selection {
+  background: var(--quicksand);
+  color: var(--royal-blue);
+}
