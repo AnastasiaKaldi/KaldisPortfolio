@@ -54,7 +54,7 @@ export function SiteNav() {
         </div>
       </div>
 
-      <nav className={`site-nav__mobile ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile menu" aria-hidden={!menuOpen}>
+      <nav className={`site-nav__mobile ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile menu" aria-hidden={menuOpen ? 'false' : 'true'}>
         <a href="#about" onClick={close}>{t.nav_about}</a>
         <a href="#book" onClick={close}>{t.nav_book}</a>
         <a href="#quote" onClick={close}>{t.nav_voice}</a>
