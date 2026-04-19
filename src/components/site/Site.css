@@ -30,7 +30,7 @@ html {
 }
 
 /* ============================================================
-   NAV
+   NAV — bookmark shape
    ============================================================ */
 .site-nav {
   position: fixed;
@@ -38,21 +38,41 @@ html {
   left: 0;
   right: 0;
   z-index: 50;
+  background: rgba(8, 14, 32, 0.82);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  /* bookmark: V-notch cut from the bottom centre */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 24px),
+    50% 100%,
+    0 calc(100% - 24px)
+  );
+  transition: background 0.35s ease, clip-path 0.25s ease;
+}
+
+/* Remove clip so the mobile dropdown isn't cut off */
+.site-nav.menu-open {
+  clip-path: none;
+  background: rgba(8, 14, 32, 0.97);
+}
+
+.site-nav__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.2rem clamp(1.2rem, 4vw, 3rem);
-  transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, padding 0.3s ease;
-  border-bottom: 1px solid transparent;
+  padding: 1rem clamp(1.2rem, 4vw, 3rem) calc(1rem + 24px);
+  transition: padding 0.3s ease;
 }
 
-.site-nav.is-scrolled {
-  background: rgba(8, 14, 32, 0.72);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border-bottom-color: rgba(224, 181, 143, 0.18);
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
+.site-nav.is-scrolled .site-nav__row {
+  padding-top: 0.7rem;
+  padding-bottom: calc(0.7rem + 24px);
+}
+
+.site-nav.menu-open .site-nav__row {
+  padding-bottom: 1rem;
 }
 
 .site-nav__mark {
@@ -170,12 +190,100 @@ html {
   background: rgba(224, 181, 143, 0.06);
 }
 
-@media (max-width: 720px) {
+.site-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-nav__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+}
+
+.site-nav__burger span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--shellstone);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease, background 0.2s;
+}
+
+.menu-open .site-nav__burger span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-open .site-nav__burger span:nth-child(2) {
+  opacity: 0;
+}
+.menu-open .site-nav__burger span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.site-nav__mobile {
+  display: none;
+}
+
+/* Mobile menu — always rendered, animated open/close */
+.site-nav__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  border-top: 1px solid transparent;
+  transition:
+    max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.28s ease,
+    transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.28s ease;
+}
+
+.site-nav__mobile.is-open {
+  max-height: 320px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  border-top-color: rgba(224, 181, 143, 0.1);
+}
+
+.site-nav__mobile a {
+  font-family: var(--serif-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--shellstone);
+  text-decoration: none;
+  padding: 0.75rem clamp(1.2rem, 5vw, 3rem);
+  border-bottom: 1px solid rgba(224, 181, 143, 0.08);
+  transition: color 0.2s, background 0.2s;
+}
+
+.site-nav__mobile a:last-child {
+  border-bottom: none;
+}
+
+.site-nav__mobile a:hover {
+  color: var(--quicksand);
+  background: rgba(224, 181, 143, 0.04);
+}
+
+@media (max-width: 680px) {
   .site-nav__role { display: none; }
-  .site-nav__name { font-size: 0.82rem; }
-  .site-nav__monogram { width: 32px; height: 32px; font-size: 0.82rem; }
-  .site-nav__links { gap: 0.9rem; }
-  .site-nav__links a { font-size: 0.64rem; letter-spacing: 0.2em; }
+  .site-nav__name { font-size: 0.84rem; }
+  .site-nav__monogram { width: 32px; height: 32px; font-size: 0.8rem; }
+  .site-nav__links { display: none; }
+  .site-nav__burger { display: flex; }
 }
 
 /* ============================================================
@@ -917,5 +1025,95 @@ html {
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
+  }
+}
+
+/* ============================================================
+   MOBILE — comprehensive overrides
+   ============================================================ */
+@media (max-width: 680px) {
+  /* Hero */
+  .site-hero {
+    padding: 6rem 1.2rem 4rem;
+    min-height: 100svh;
+  }
+
+  .site-hero__eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+  }
+
+  .site-hero__rule span:nth-child(1),
+  .site-hero__rule span:nth-child(3) {
+    width: 40px;
+  }
+
+  .site-hero__tagline {
+    font-size: 0.95rem;
+  }
+
+  .site-hero__row {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+  }
+
+  .site-hero__cta,
+  .site-hero__ghost {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+    padding: 0.85rem 1.2rem;
+    font-size: 0.72rem;
+  }
+
+  .site-hero__scroll {
+    bottom: 1.2rem;
+  }
+
+  /* About */
+  .site-about {
+    padding: 3.5rem 1.2rem;
+  }
+
+  .site-about__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .site-about__col p {
+    font-size: 1rem;
+  }
+
+  .site-about__lede {
+    font-size: 1.05rem !important;
+  }
+
+  /* Quote */
+  .site-quote {
+    padding: 4rem 1.2rem;
+  }
+
+  .site-quote__block p {
+    font-size: clamp(1.15rem, 5vw, 1.6rem);
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 3rem 1.2rem 2rem;
+  }
+
+  .site-footer__email {
+    font-size: 1rem;
+    word-break: break-all;
+  }
+
+  .site-footer__grid {
+    padding: 2rem 0;
+  }
+
+  .site-footer__base {
+    font-size: 0.62rem;
   }
 }
